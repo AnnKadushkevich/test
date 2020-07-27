@@ -17,3 +17,4 @@ def test_add_contact(app):
     assert sorted ( old_contact, key=Contact.id_or_max ) == sorted ( new_contact, key=Contact.id_or_max )
 
 
+
