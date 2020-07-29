@@ -84,6 +84,7 @@ class ContactHelper:
         wd.find_element_by_name ( "notes" ).click ()
         wd.find_element_by_name ( "notes" ).clear ()
         wd.find_element_by_name ( "notes" ).send_keys ( contact.notes )
+        self.contact_cache = None
 
     def create(self, contact):
         wd = self.app.wd
@@ -94,14 +95,17 @@ class ContactHelper:
         # submit group creation
         wd.find_element_by_xpath ( "(//input[@name='submit'])[2]" ).click ()
         self.retern_to_home_page ( )
+        self.contact_cache = None
 
     def select_contact(self):
         wd = self.app.wd
         wd.find_element_by_name ( "selected[]" ).click ()
+        self.contact_cache = None
 
     def select_contact_by_index(self,index):
         wd = self.app.wd
         wd.find_element_by_name ( "selected[]" )[index].click ()
+        self.contact_cache = None
 
     def delete_contact_by_index(self,index):
         wd = self.app.wd
@@ -111,6 +115,7 @@ class ContactHelper:
         wd.find_element_by_xpath ( "//input[@value='Delete']" ).click ()
         wd.switch_to_alert ().accept ()
         self.retern_to_home_page ( )
+        self.contact_cache = None
 
     def delete_first_contact(self):
         self.delete_contact_by_index(0)
@@ -134,15 +139,23 @@ class ContactHelper:
         self.open_home_page()
         return len(wd.find_elements_by_name ( "selected[]" ))
 
-    contact_cashe = None
+
+    contact_cache = None
 
     def get_contact_list(self):
-        if self.contact_cashe in None:
+        if self.contact_cache is None:
             wd = self.app.wd
             self.open_home_page ()
-            self.contact_cashe = []
-            for element in wd.find_elements_by_css_selector ( "span.contact" ):
-                text = element.text
+            self.contact_cache = []
+            for element in wd.find_elements_by_xpath ( "//tr[@name='entry']" ):
+                text = element.find_elements_by_tag_name ( "td" )
+                text_lastname = text[1].text
+                text_firstname = text[2].text
+                text_address = text[3].text
+                all_emails = text[4].text
+                all_phones = text[5].text
                 id = element.find_element_by_name ( "selected[]" ).get_attribute ( "value" )
-                contact.append( Contact( firstname =text,lastname= text, id=id ) )
-        return list(self.contact_cashe)
+                self.contact_cache.append ( Contact ( firstname=text_firstname, lastname=text_lastname, id=id,
+                                                      all_phones_from_home_page=all_phones, address=text_address,
+                                                      email=all_emails ) )
+        return list ( self.contact_cache )
