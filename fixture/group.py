@@ -54,7 +54,7 @@ class GroupHelper:
         self.group_cashe = None
 
     def delite_first_group(self):
-        self.delite_group_by_index(0)
+        self.delete_group_by_index(0)
 
     def edit_group(self):
         wd = self.app.wd
@@ -82,7 +82,6 @@ class GroupHelper:
 
     def modify_first_group(self):
         self.modify_group_by_index(0)
-
 
 
     def retern_to_groups_page(self):
