@@ -94,18 +94,22 @@ class GroupHelper:
         self.open_group_page ()
         return len(wd.find_elements_by_name ( "selected[]" ))
 
-    group_cashe = None
+   contact_cache = None
 
-    def get_group_list(self):
-        if self.group_cashe is None:
+    def get_contact_list(self):
+        if self.contact_cache is None:
             wd = self.app.wd
-            self.open_group_page ()
-            self.group_cashe = []
-            for element in wd.find_elements_by_css_selector("span.group"):
-                text = element.text
-                id = element.find_element_by_name( "selected[]" ).get_attribute("value")
-                groups.append(Group(name=text, id = id))
-        return list(self.group_cashe)
-
-
-
+            self.open_home_page ()
+            self.contact_cache = []
+            for element in wd.find_elements_by_xpath ( "//tr[@name='entry']" ):
+                text = element.find_elements_by_tag_name ( "td" )
+                text_lastname = text[1].text
+                text_firstname = text[2].text
+                text_address = text[3].text
+                all_emails = text[4].text
+                all_phones = text[5].text
+                id = element.find_element_by_name ( "selected[]" ).get_attribute ( "value" )
+                self.contact_cache.append ( Contact ( firstname=text_firstname, lastname=text_lastname, id=id,
+                                                      all_phones_from_home_page=all_phones, address=text_address,
+                                                      email=all_emails ) )
+        return list ( self.contact_cache )
