@@ -1,7 +1,7 @@
 from model.contact import Contact
 
 def test_edit_contact(app):
-    if app.contacts.count() == 0:
-        app.contacts.create(Contact(firstname=''))
+    if app.contact.count() == 0:
+        app.contact.create(Contact(firstname=''))
 
-    app.contacts.edit_contact()
+    app.contact.edit_contact()
