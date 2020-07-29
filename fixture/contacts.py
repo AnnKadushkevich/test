@@ -122,7 +122,7 @@ class ContactHelper:
 
     def modify_first_contact(self):
         wd = self.app.wd
-        self.modificate_contact_by_index ( 0 )
+        self.modify_contact_by_index ( 0 )
 
     def modify_contact_by_index(self, index, new_contact_data):
         wd = self.app.wd
