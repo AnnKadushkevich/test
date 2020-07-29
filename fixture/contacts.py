@@ -155,12 +155,14 @@ class ContactHelper:
                 cells = element.find_elements_by_tag_name ( "td" )
                 lastname = cells[1].text
                 firstname = cells[2].text
-                id = text[0].find_element_by_tag_name ( "input" ).get_attribute ( "value" )
-                all_phones = cells[5].text.splitlines()
-                self.contact_cache.append ( Contact ( firstname=firstname, lastname=lastname, id=id,
-                                                      homephone = all_phones[0], mobilephone = all_phones[1],
-                                                      workphone = all_phones[2], secondaryphone = all_phones[3]) )
+                address = cells[3].text
+                all_emails = cells[4].text
+                all_phones = cells[5].text
+                id = element.find_element_by_name ( "selected[]" ).get_attribute ( "value" )
+                        self.contact_cache.append ( Contact ( firstname=firstname, lastname=lastname, id=id,
+                                            all_phones_from_home_page = all_phones,address=address, email=all_emails ) )
         return list ( self.contact_cache )
+
 
     def open_contact_to_edit_by_index(self, index):
         wd = self.app.wd
@@ -197,4 +199,5 @@ class ContactHelper:
         secondaryphone = re.search ( "P: (.*)", text ).group ( 1 )
         return Contact (homephone=homephone, mobilephone=mobilephone,
                          workphone=workphone, secondaryphone=secondaryphone)
+
 
