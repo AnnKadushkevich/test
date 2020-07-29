@@ -120,15 +120,19 @@ class ContactHelper:
     def delete_first_contact(self):
         self.delete_contact_by_index(0)
 
-    def edit_contact(self):
+    def modify_first_contact(self):
+        wd = self.app.wd
+        self.modificate_contact_by_index ( 0 )
+
+    def modify_contact_by_index(self, index, new_contact_data):
         wd = self.app.wd
         self.open_home_page ()
-        self.select_contact()
-        # editing
-        wd.find_element_by_xpath ( "//img[@alt='Edit']" ).click ()
-        self.fill_contact_form()
-        wd.find_element_by_xpath ( "(//input[@name='update'])[2]" ).click ()
+        self.select_contact_by_index ( index )
+        wd.find_elements_by_xpath ( "//img[@alt='Edit']" )[index].click () 
+        self.fill_contact_form ( new_contact_data )
+        wd.find_element_by_xpath ( "(//input[@name='update'])" ).click ()
         self.retern_to_home_page ()
+        self.contact_cache = None
 
     def retern_to_home_page(self):
         wd = self.app.wd
