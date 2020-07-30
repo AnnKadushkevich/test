@@ -13,14 +13,11 @@ class ContactHelper:
 
     contact_cache = None
 
-    def fill_contact_form(self, contact):
+       def fill_contact_form(self, contact):
         wd = self.app.wd
         wd.find_element_by_name ( "firstname" ).click ()
         wd.find_element_by_name ( "firstname" ).clear ()
         wd.find_element_by_name ( "firstname" ).send_keys ( contact.firstname )
-        wd.find_element_by_name ( "middlename" ).click ()
-        wd.find_element_by_name ( "middlename" ).clear ()
-        wd.find_element_by_name ( "middlename" ).send_keys ( contact.middlename )
         wd.find_element_by_name ( "lastname" ).click ()
         wd.find_element_by_name ( "lastname" ).clear ()
         wd.find_element_by_name ( "lastname" ).send_keys ( contact.lastname )
@@ -38,13 +35,13 @@ class ContactHelper:
         wd.find_element_by_name ( "address" ).send_keys ( contact.address )
         wd.find_element_by_name ( "home" ).click ()
         wd.find_element_by_name ( "home" ).clear ()
-        wd.find_element_by_name ( "home" ).send_keys ( contact.home )
+        wd.find_element_by_name ( "home" ).send_keys ( contact.homephone )
         wd.find_element_by_name ( "mobile" ).click ()
         wd.find_element_by_name ( "mobile" ).clear ()
-        wd.find_element_by_name ( "mobile" ).send_keys ( contact.mobile )
+        wd.find_element_by_name ( "mobile" ).send_keys ( contact.mobilephone )
         wd.find_element_by_name ( "work" ).click ()
         wd.find_element_by_name ( "work" ).clear ()
-        wd.find_element_by_name ( "work" ).send_keys ( contact.work )
+        wd.find_element_by_name ( "work" ).send_keys ( contact.workphone )
         wd.find_element_by_name ( "fax" ).click ()
         wd.find_element_by_name ( "fax" ).clear ()
         wd.find_element_by_name ( "fax" ).send_keys ( contact.fax )
@@ -83,7 +80,7 @@ class ContactHelper:
         wd.find_element_by_name ( "address2" ).send_keys ( contact.address2 )
         wd.find_element_by_name ( "phone2" ).click ()
         wd.find_element_by_name ( "phone2" ).clear ()
-        wd.find_element_by_name ( "phone2" ).send_keys ( contact.phone2 )
+        wd.find_element_by_name ( "phone2" ).send_keys ( contact.secondaryphone )
         wd.find_element_by_name ( "notes" ).click ()
         wd.find_element_by_name ( "notes" ).clear ()
         wd.find_element_by_name ( "notes" ).send_keys ( contact.notes )
