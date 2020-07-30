@@ -11,7 +11,7 @@ def random_string(prefix, maxlen):
 
 testdata = [Contact(firstname="", lastname="", address="", email="", homephone="")] + [
     Contact(firstname=random_string("firstname", 10), lastname=random_string("lastname", 10), address=random_string("address", 20),
-            email=random_string("email", 10), homephone=random_string("home", 20))
+            email=random_string("email", 10), homephone=random_string("homephone", 20))
     for i in range(5)
 ]
 @pytest.mark.parametrize("contact", testdata, ids=[repr(x) for x in testdata])
