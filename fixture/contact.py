@@ -12,8 +12,8 @@ class ContactHelper:
             wd.find_element_by_link_text ( "home" ).click ()
 
     contact_cache = None
-
-       def fill_contact_form(self, contact):
+    
+    def fill_contact_form(self, contact):
         wd = self.app.wd
         wd.find_element_by_name ( "firstname" ).click ()
         wd.find_element_by_name ( "firstname" ).clear ()
@@ -156,7 +156,7 @@ class ContactHelper:
                 all_emails = cells[4].text
                 all_phones = cells[5].text
                 id = element.find_element_by_name ( "selected[]" ).get_attribute ( "value" )
-                        self.contact_cache.append ( Contact ( firstname=firstname, lastname=lastname, id=id,
+                self.contact_cache.append ( Contact ( firstname=firstname, lastname=lastname, id=id,
                                             all_phones_from_home_page = all_phones,address=address, email=all_emails ) )
         return list ( self.contact_cache )
 
