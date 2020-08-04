@@ -1,14 +1,17 @@
-
+from fixture import db
 from model.contact import Contact
-from random import  randrange
+import random
 
-def test_delete_some_contact(app):
-    if app.contact.count() == 0:
-        app.contact.create(Contact(firstname='test'))
-    old_contact = app.contact.get_contact_list ()
-    index = randrange ( len ( old_contact ) )
-    app.contact.delete_contact_by_index(index)
-    new_contact = app.contact.get_contact_list ()
-    assert len ( old_contact - 1 ) == len ( new_contact )
-    old_contact[index:index+1] = []
-    assert old_contact == new_contact
+
+def test_delete_some_contact(app, db, check_ui):
+    if len(db.get_contact_list()) == 0:
+        app.contact.contact(Contact(firstname="test"))
+    old_contacts = db.get_contact_list()
+    contact = random.choice(old_contacts)
+    app.contact.delete_contact_by_id(contact.id)
+    new_contacts = db.get_contact_list()
+    assert len(new_contacts) == len(old_contacts) - 1
+    old_contacts.remove(contact)
+    assert old_contacts == new_contacts
+    if check_ui:
+        assert sorted(new_contacts, key=Contact.id_or_max) == sorted(app.contact.get_contact_list(), key=Contact.id_or_max)
