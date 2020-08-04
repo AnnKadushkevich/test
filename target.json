@@ -3,5 +3,11 @@
     "baseUrl": "http://localhost/addressbook/",
     "username": "admin",
     "password": "secret"
+  },
+  "db": {
+    "host": "localhost",
+    "name": "addressbook",
+    "user": "root",
+    "passwird": ""
   }
 }
