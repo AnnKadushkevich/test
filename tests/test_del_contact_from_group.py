@@ -18,10 +18,9 @@ def test_del_contact_from_group(app, db):
     contacts_in_groups = orm.contacts_in_groups()
 
     if len(contacts_in_groups) == 0:
-         group_in_contact = app.group.create(Group( name="group_to_delete))
-         contacts_in_groups = app.contact.contact(Contact(firstname="contact_to_delete"))
-         app.contact.add_contact_to_group(contacts_in_groups, group_in_contact)
-         contacts_in_groups = orm.contacts_in_groups()
+        app.contact.add_contact_to_group ()
+        contacts_in_groups = orm.contacts_in_groups ()
+
 
     contacts_in_groups = contacts_in_groups[0]
     group_in_contact = orm.get_groups_of_contact(contacts_in_groups)[0]
@@ -31,3 +30,4 @@ def test_del_contact_from_group(app, db):
 
     # проверяем, что список свободных контактов изменился на 1
     assert len(contacts_in_groups)  == len(new_contacts_in_groups)+1
+
