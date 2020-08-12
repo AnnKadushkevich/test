@@ -1,14 +1,16 @@
 import pytest
-import  json
+from fixture.app import App
+import json
 import os.path
-import importlib
 import jsonpickle
-from fixture.application import Application
-from  fixture.db import DbFixture
+import importlib
+from fixture.db import DbFixture
+from fixture.orm import ORMFixture
 
 
 fixture = None
 target = None
+
 
 def load_config(file):
     global target
@@ -18,14 +20,15 @@ def load_config(file):
             target = json.load(f)
     return target
 
+
 @pytest.fixture
-def app (request):
+def app(request):
     global fixture
-    browser = request.config.getoption ( "--browser" )
-    web_config = load_config(request.config.getoption ( "--target" ))['web']
-    if fixture is None or not fixture.is_valid:
-        fixture = Application(browser=browser, base_url=  web_config ["baseUrl"])
-    fixture.session.ensure_login(username= web_config ["username"], password= web_config ["password"])
+    browser = request.config.getoption("--browser")
+    web_config = load_config(request.config.getoption("--target"))["web"]
+    if fixture is None or not fixture.is_valid():
+        fixture = App(browser=browser, base_url=web_config["baseUrl"])
+    fixture.session.ensure_login(username=web_config["username"], password=web_config["password"])
     return fixture
 
 @pytest.fixture(scope = "session")
@@ -37,13 +40,20 @@ def db(request):
     request.addfinalizer(fin)
     return dbfixture
 
-@pytest.fixture ( scope="session" , autouse=True)
-def stop (request):
+
+@pytest.fixture(scope="session", autouse = True)
+def stop(request):
     def fin():
         fixture.session.ensure_logout()
         fixture.destroy()
-    request.addfinalizer ( fin )
+    request.addfinalizer(fin)
     return fixture
+
+def pytest_addoption(parser):
+    parser.addoption("--browser", action="store", default="firefox")
+    parser.addoption("--target", action="store", default="target.json")
+    parser.addoption("--check_ui", action="store_true")
+
 
 def pytest_generate_tests(metafunc):
     for fixture in metafunc.fixturenames:
@@ -64,15 +74,7 @@ def load_from_json(file):
         return jsonpickle.decode(f.read())
 
 
+
 @pytest.fixture
 def check_ui(request):
     return request.config.getoption("--check_ui")
-
-
-def pytest_addoption(parser):
-    parser.addoption ( "--browser", action="store", default="firefox" )
-    parser.addoption ( "--target", action="store", default="target.json" )
-    parser.addoption ( "--check_ui", action="store_true" )
-
-
-
