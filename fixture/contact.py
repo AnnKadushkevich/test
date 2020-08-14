@@ -1,5 +1,7 @@
-from model.group import Contact
-import  re
+from pony.orm import select
+
+from model.contact import Contact
+import re
 
 class ContactHelper:
 
@@ -12,7 +14,7 @@ class ContactHelper:
             wd.find_element_by_link_text ( "home" ).click ()
 
     contact_cache = None
-    
+
     def fill_contact_form(self, contact):
         wd = self.app.wd
         wd.find_element_by_name ( "firstname" ).click ()
@@ -196,8 +198,8 @@ class ContactHelper:
         secondaryphone = re.search ( "P: (.*)", text ).group ( 1 )
         return Contact (homephone=homephone, mobilephone=mobilephone,
                          workphone=workphone, secondaryphone=secondaryphone)
-    
-     def select_contact_by_id(self, index):
+
+    def select_contact_by_id(self, index):
         wd = self.app.wd
         self.open_home_page ()
         wd.find_element_by_name ( "selected[]" ).click ()
@@ -222,5 +224,35 @@ class ContactHelper:
         self.open_home_page ()
         self.contact_cache = None
 
+        def clear(self, s):
+            return re.sub ( "[() -]", "", s )
 
+        def merge_phones_like_on_home_page (self, contact):
+            return "\n".join ( filter ( lambda x: x != "",
+                                        map ( lambda x: self.clear ( x ),
+                                              filter ( lambda x: x is not None,
+                                                       [contact.home, contact.mobile, contact.work,
+                                                        contact.phone2] ) ) ) )
+
+        def merge_emails_like_on_home_page (self, contact):
+            return "\n".join ( filter ( lambda x: x != "",
+                                        map ( lambda x: self.clear ( x ),
+                                              filter ( lambda x: x is not None,
+                                                       [contact.email, contact.email2, contact.email3] ) ) ) )
+
+        def add_contact_to_group (self, contact, group):
+            wd = self.app.wd
+            self.select_contact_by_id ( contact.id )
+            wd.find_element_by_name ( "to_group" ).click ()
+            select ( wd.find_element_by_name ( "to_group" ) ).select_by_value ( group.id )
+            wd.find_element_by_name ( "add" ).click ()
+            self.open_home_page ()
+
+        def remove_contact_from_group(self, contact, group):
+            wd = self.app.wd
+            wd.find_element_by_name ( "group" ).click ()
+            select ( wd.find_element_by_name ( "group" ) ).select_by_value ( group.id )
+            wd.find_element_by_id ( contact.id ).click ()
+            wd.find_element_by_name ( "remove" ).click ()
+            self.open_home_page ()
 
