@@ -20,7 +20,8 @@ def test_del_contact_from_group(app, db):
     if len(contacts_in_groups) == 0:
         app.contact.add_contact_to_group ()
         contacts_in_groups = orm.contacts_in_groups ()
-
+        app.contact.add_contact_to_group( dealed_contact, dealed_group)
+        old_dealed_contacts = orm.contacts_in_groups()
 
     contacts_in_groups = contacts_in_groups[0]
     group_in_contact = orm.get_groups_of_contact(contacts_in_groups)[0]
